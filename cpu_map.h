@@ -34,16 +34,16 @@
   #define SERIAL_UDRE   USART_UDRE_vect
 
   // Define step pulse output pins. NOTE: All step bit pins must be on the same port.
-  #define STEP_DDR        DDRB
-  #define STEP_PORT       PORTB
+  #define STEP_DDR        DDRD
+  #define STEP_PORT       PORTD
   #define X_STEP_BIT      3  // Uno Digital Pin 2
   #define Y_STEP_BIT      5  // Uno Digital Pin 3
   #define Z_STEP_BIT      7  // Uno Digital Pin 4
   #define STEP_MASK       ((1<<X_STEP_BIT)|(1<<Y_STEP_BIT)|(1<<Z_STEP_BIT)) // All step bits
 
   // Define step direction output pins. NOTE: All direction pins must be on the same port.
-  #define DIRECTION_DDR     DDRB
-  #define DIRECTION_PORT    PORTB
+  #define DIRECTION_DDR     DDRD
+  #define DIRECTION_PORT    PORTD
   #define X_DIRECTION_BIT   2  // Uno Digital Pin 5
   #define Y_DIRECTION_BIT   4  // Uno Digital Pin 6
   #define Z_DIRECTION_BIT   6  // Uno Digital Pin 7
@@ -57,9 +57,9 @@
 
   // Define homing/hard limit switch input pins and limit interrupt vectors.
   // NOTE: All limit bit pins must be on the same port, but not on a port with other input pins (CONTROL).
-  #define LIMIT_DDR        DDRD
-  #define LIMIT_PIN        PIND
-  #define LIMIT_PORT       PORTD
+  #define LIMIT_DDR        DDRB
+  #define LIMIT_PIN        PINB
+  #define LIMIT_PORT       PORTB
   #define X_LIMIT_BIT      9  // Uno Digital Pin 9
   #define Y_LIMIT_BIT      10  // Uno Digital Pin 10
   #ifdef VARIABLE_SPINDLE // Z Limit pin and spindle enabled swapped to access hardware PWM on Pin 11.
@@ -86,7 +86,7 @@
   #define CONTROL_INT       PCIE1  // Pin change interrupt enable pin
   #define CONTROL_INT_vect  PCINT1_vect
   #define CONTROL_PCMSK     PCMSK1 // Pin change interrupt register
-  #define CONTROL_MASK      ((1<<CONTROL_RESET_BIT)|(1<<CONTROL_FEED_HOLD_BIT)|(1<<CONTROL_CYCLE_START_BIT)|(0<<CONTROL_SAFETY_DOOR_BIT))
+  #define CONTROL_MASK      ((0<<CONTROL_RESET_BIT)|(1<<CONTROL_FEED_HOLD_BIT)|(0<<CONTROL_CYCLE_START_BIT)|(0<<CONTROL_SAFETY_DOOR_BIT))
   #define CONTROL_INVERT_MASK   CONTROL_MASK // May be re-defined to only invert certain control pins.
 
   // Define probe switch input pin.
@@ -107,8 +107,8 @@
     #define COOLANT_MIST_BIT   4 // Uno Analog Pin 4
 
     // Define spindle enable and spindle direction output pins.
-    #define SPINDLE_ENABLE_DDR    DDRD
-    #define SPINDLE_ENABLE_PORT   PORTD
+    #define SPINDLE_ENABLE_DDR    DDRB
+    #define SPINDLE_ENABLE_PORT   PORTB
     // Z Limit pin and spindle PWM/enable pin swapped to access hardware PWM on Pin 11.
     #ifdef VARIABLE_SPINDLE
       #ifdef USE_SPINDLE_DIR_AS_ENABLE_PIN
@@ -121,8 +121,8 @@
       #define SPINDLE_ENABLE_BIT    11  // Uno Digital Pin 12
     #endif
     #ifndef USE_SPINDLE_DIR_AS_ENABLE_PIN
-      #define SPINDLE_DIRECTION_DDR   DDRD
-      #define SPINDLE_DIRECTION_PORT  PORTD
+      #define SPINDLE_DIRECTION_DDR   DDRB
+      #define SPINDLE_DIRECTION_PORT  PORTB
       #define SPINDLE_DIRECTION_BIT   11  // Uno Digital Pin 13 (NOTE: D13 can't be pulled-high input due to LED.)
     #endif
 
@@ -141,14 +141,14 @@
 
     // Prescaled, 8-bit Fast PWM mode.
     #define SPINDLE_TCCRA_INIT_MASK   ((1<<WGM20) | (1<<WGM21))  // Configures fast PWM mode.
-    #define SPINDLE_TCCRB_INIT_MASK   (1<<CS20)               // Disable prescaler -> 62.5kHz
+    // #define SPINDLE_TCCRB_INIT_MASK   (1<<CS20)               // Disable prescaler -> 62.5kHz
     // #define SPINDLE_TCCRB_INIT_MASK   (1<<CS21)               // 1/8 prescaler -> 7.8kHz (Used in v0.9)
     // #define SPINDLE_TCCRB_INIT_MASK   ((1<<CS21) | (1<<CS20)) // 1/32 prescaler -> 1.96kHz
-    // #define SPINDLE_TCCRB_INIT_MASK   (1<<CS22)               // 1/64 prescaler -> 0.98kHz (J-tech laser)
+    #define SPINDLE_TCCRB_INIT_MASK   (1<<CS22)               // 1/64 prescaler -> 0.98kHz (J-tech laser)
 
     // NOTE: On the 328p, these must be the same as the SPINDLE_ENABLE settings.
-    #define SPINDLE_PWM_DDR   DDRD
-    #define SPINDLE_PWM_PORT  PORTD
+    #define SPINDLE_PWM_DDR   DDRB
+    #define SPINDLE_PWM_PORT  PORTB
     #define SPINDLE_PWM_BIT   11    // Uno Digital Pin 11
   
   #else
@@ -159,12 +159,12 @@
 
     #ifdef DUAL_AXIS_CONFIG_PROTONEER_V3_51
       // NOTE: Step pulse and direction pins may be on any port and output pin.
-      #define STEP_DDR_DUAL       DDRB
-      #define STEP_PORT_DUAL      PORTB
+      #define STEP_DDR_DUAL       DDRD
+      #define STEP_PORT_DUAL      PORTD
       #define DUAL_STEP_BIT       5  // Uno Analog Pin 4
       #define STEP_MASK_DUAL      ((0<<DUAL_STEP_BIT))
-      #define DIRECTION_DDR_DUAL  DDRB
-      #define DIRECTION_PORT_DUAL PORTB
+      #define DIRECTION_DDR_DUAL  DDRD
+      #define DIRECTION_PORT_DUAL PORTD
       #define DUAL_DIRECTION_BIT  4  // Uno Analog Pin 3
       #define DIRECTION_MASK_DUAL ((0<<DUAL_DIRECTION_BIT))
 
@@ -181,8 +181,8 @@
 
       // Define spindle enable output pin.
       // NOTE: Spindle enable moved from D12 to A3 (old coolant flood enable pin). Spindle direction pin is removed.
-      #define SPINDLE_ENABLE_DDR    DDRD
-      #define SPINDLE_ENABLE_PORT   PORTD
+      #define SPINDLE_ENABLE_DDR    DDRB
+      #define SPINDLE_ENABLE_PORT   PORTB
       #ifdef VARIABLE_SPINDLE
         // NOTE: USE_SPINDLE_DIR_AS_ENABLE_PIN not supported with dual axis feature.
         #define SPINDLE_ENABLE_BIT    11  // Uno Digital Pin 11
@@ -205,26 +205,26 @@
 
       // Prescaled, 8-bit Fast PWM mode.
       #define SPINDLE_TCCRA_INIT_MASK   ((1<<WGM20) | (1<<WGM21))  // Configures fast PWM mode.
-      #define SPINDLE_TCCRB_INIT_MASK   (1<<CS20)               // Disable prescaler -> 62.5kHz
+      // #define SPINDLE_TCCRB_INIT_MASK   (1<<CS20)               // Disable prescaler -> 62.5kHz
       // #define SPINDLE_TCCRB_INIT_MASK   (1<<CS21)               // 1/8 prescaler -> 7.8kHz (Used in v0.9)
       // #define SPINDLE_TCCRB_INIT_MASK   ((1<<CS21) | (1<<CS20)) // 1/32 prescaler -> 1.96kHz
-      // #define SPINDLE_TCCRB_INIT_MASK      (1<<CS22)               // 1/64 prescaler -> 0.98kHz (J-tech laser)
+      #define SPINDLE_TCCRB_INIT_MASK      (1<<CS22)               // 1/64 prescaler -> 0.98kHz (J-tech laser)
 
       // NOTE: On the 328p, these must be the same as the SPINDLE_ENABLE settings.
-      #define SPINDLE_PWM_DDR   DDRD
-      #define SPINDLE_PWM_PORT  PORTD
+      #define SPINDLE_PWM_DDR   DDRB
+      #define SPINDLE_PWM_PORT  PORTB
       #define SPINDLE_PWM_BIT   11  // Uno Digital Pin 11
     #endif
 
     // NOTE: Variable spindle not supported with this shield.
     #ifdef DUAL_AXIS_CONFIG_CNC_SHIELD_CLONE
       // NOTE: Step pulse and direction pins may be on any port and output pin.
-      #define STEP_DDR_DUAL       DDRB
-      #define STEP_PORT_DUAL      PORTB
+      #define STEP_DDR_DUAL       DDRD
+      #define STEP_PORT_DUAL      PORTD
       #define DUAL_STEP_BIT       5  // Uno Digital Pin 12
       #define STEP_MASK_DUAL      ((0<<DUAL_STEP_BIT))
-      #define DIRECTION_DDR_DUAL  DDRB
-      #define DIRECTION_PORT_DUAL PORTB
+      #define DIRECTION_DDR_DUAL  DDRD
+      #define DIRECTION_PORT_DUAL PORTD
       #define DUAL_DIRECTION_BIT  4  // Uno Digital Pin 13
       #define DIRECTION_MASK_DUAL ((0<<DUAL_DIRECTION_BIT))
 
@@ -240,8 +240,8 @@
 
       // Define spindle enable output pin.
       // NOTE: Spindle enable moved from D12 to A3 (old coolant flood enable pin). Spindle direction pin is removed.
-      #define SPINDLE_ENABLE_DDR    DDRD
-      #define SPINDLE_ENABLE_PORT   PORTD
+      #define SPINDLE_ENABLE_DDR    DDRB
+      #define SPINDLE_ENABLE_PORT   PORTB
       #define SPINDLE_ENABLE_BIT    11  // Uno Analog Pin 3
     #endif
 
