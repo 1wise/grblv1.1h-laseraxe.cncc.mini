@@ -53,7 +53,7 @@
   #define STEPPERS_DISABLE_DDR    DDRB
   #define STEPPERS_DISABLE_PORT   PORTB
   #define STEPPERS_DISABLE_BIT    8  // Uno Digital Pin 8
-  #define STEPPERS_DISABLE_MASK   (1<<STEPPERS_DISABLE_BIT)
+  #define STEPPERS_DISABLE_MASK   (0<<STEPPERS_DISABLE_BIT)
 
   // Define homing/hard limit switch input pins and limit interrupt vectors.
   // NOTE: All limit bit pins must be on the same port, but not on a port with other input pins (CONTROL).
@@ -68,7 +68,7 @@
     #define Z_LIMIT_BIT    12  // Uno Digital Pin 11
   #endif
   #if !defined(ENABLE_DUAL_AXIS)
-    #define LIMIT_MASK     ((1<<X_LIMIT_BIT)|(1<<Y_LIMIT_BIT)|(1<<Z_LIMIT_BIT)) // All limit bits
+    #define LIMIT_MASK     ((0<<X_LIMIT_BIT)|(0<<Y_LIMIT_BIT)|(0<<Z_LIMIT_BIT)) // All limit bits
   #endif
   #define LIMIT_INT        PCIE0  // Pin change interrupt enable pin
   #define LIMIT_INT_vect   PCINT0_vect
@@ -130,7 +130,7 @@
     // NOTE: Only used when variable spindle is enabled.
     #define SPINDLE_PWM_MAX_VALUE     255 // Don't change. 328p fast PWM mode fixes top value as 255.
     #ifndef SPINDLE_PWM_MIN_VALUE
-      #define SPINDLE_PWM_MIN_VALUE   1   // Must be greater than zero.
+      #define SPINDLE_PWM_MIN_VALUE   5   // Must be greater than zero.
     #endif
     #define SPINDLE_PWM_OFF_VALUE     0
     #define SPINDLE_PWM_RANGE         (SPINDLE_PWM_MAX_VALUE-SPINDLE_PWM_MIN_VALUE)
@@ -194,7 +194,7 @@
       // NOTE: Only used when variable spindle is enabled.
       #define SPINDLE_PWM_MAX_VALUE     255 // Don't change. 328p fast PWM mode fixes top value as 255.
       #ifndef SPINDLE_PWM_MIN_VALUE
-        #define SPINDLE_PWM_MIN_VALUE   1   // Must be greater than zero.
+        #define SPINDLE_PWM_MIN_VALUE   5   // Must be greater than zero.
       #endif
       #define SPINDLE_PWM_OFF_VALUE     0
       #define SPINDLE_PWM_RANGE         (SPINDLE_PWM_MAX_VALUE-SPINDLE_PWM_MIN_VALUE)
